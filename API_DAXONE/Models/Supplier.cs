@@ -30,8 +30,10 @@ namespace API_DAXONE.Models
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Xml.Serialization.XmlIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }

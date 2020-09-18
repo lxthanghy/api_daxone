@@ -29,8 +29,8 @@ namespace API_DAXONE.Controllers
         {
             try
             {
-                Product product = daxoneEntities.Products.Find(id);
-                return product != null ? Request.CreateResponse(HttpStatusCode.Found, product) : Request.CreateResponse(HttpStatusCode.NotFound);
+                Customer customer = daxoneEntities.Customers.Find(id);
+                return customer != null ? Request.CreateResponse(HttpStatusCode.Found, customer) : Request.CreateResponse(HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
@@ -39,18 +39,73 @@ namespace API_DAXONE.Controllers
         }
 
         // POST: api/Customer
-        public void Post([FromBody] string value)
+        public HttpResponseMessage Post([FromBody] Customer customer)
         {
+            try
+            {
+                daxoneEntities.Customers.Add(customer);
+                daxoneEntities.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         // PUT: api/Customer/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage Put(int id, [FromBody] Customer customer)
         {
+            try
+            {
+                Customer cus = daxoneEntities.Customers.Find(id);
+                cus.Password = customer.Password;
+                cus.Name = customer.Name;
+                cus.Address = customer.Address;
+                cus.Email = customer.Email;
+                cus.Phone = customer.Phone;
+                cus.DateOfBirth = customer.DateOfBirth;
+                cus.Avatar = customer.Avatar;
+                daxoneEntities.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
 
         // DELETE: api/Customer/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
+            try
+            {
+                Customer customer = daxoneEntities.Customers.Find(id);
+                if (customer != null)
+                {
+                    daxoneEntities.Customers.Remove(customer);
+                    daxoneEntities.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+        [HttpGet]
+        public HttpResponseMessage getOrder(int idCus)
+        {
+            try
+            {
+                Customer customer = daxoneEntities.Customers.Find(idCus);
+                return Request.CreateResponse(HttpStatusCode.OK, customer.Orders);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
         }
     }
 }

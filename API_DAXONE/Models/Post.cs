@@ -25,7 +25,10 @@ namespace API_DAXONE.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public Nullable<int> ViewCount { get; set; }
-    
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Xml.Serialization.XmlIgnore]
         public virtual PostCategory PostCategory { get; set; }
     }
 }
